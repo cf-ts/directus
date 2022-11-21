@@ -322,6 +322,15 @@ class OASSpecsService implements SpecificationSubService {
 		if (!components) components = {};
 
 		components.schemas = {};
+		// copy schemas without a collection
+		if (openapi.components && openapi.components.schemas) {
+			for (const schemaName in openapi.components.schemas) {
+				const schema: any = openapi.components!.schemas![schemaName];
+				if (!schema['x-collection']) {
+					components.schemas[schemaName] = schema;
+				}
+			}
+		}
 
 		if (!tags) return;
 
